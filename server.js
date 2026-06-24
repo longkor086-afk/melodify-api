@@ -8,6 +8,15 @@ app.get("/", (req, res) => {
   res.send("Melodify API Running");
 });
 
+app.get("/check", (req, res) => {
+  res.json({
+    hasToken: !!process.env.BOT_TOKEN,
+    tokenLength: process.env.BOT_TOKEN
+      ? process.env.BOT_TOKEN.length
+      : 0
+  });
+});
+
 app.get("/test/:fileId", async (req, res) => {
   const fileId = req.params.fileId;
 
