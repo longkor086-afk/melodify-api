@@ -4,12 +4,22 @@ const app = express();
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 
-// Test API
 app.get("/", (req, res) => {
   res.send("Melodify API Running");
 });
 
-// Get Telegram file URL from file_id
+app.get("/test/:fileId", async (req, res) => {
+  const fileId = req.params.fileId;
+
+  const response = await fetch(
+    `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`
+  );
+
+  const data = await response.json();
+
+  res.json(data);
+});
+
 app.get("/song/:fileId", async (req, res) => {
   try {
     const fileId = req.params.fileId;
@@ -30,6 +40,7 @@ app.get("/song/:fileId", async (req, res) => {
       `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
 
     res.redirect(fileUrl);
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
